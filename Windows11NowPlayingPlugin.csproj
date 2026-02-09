@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
+    <!-- Override SDK package version - 10.0.19041.56 may not exist on NuGet -->
+    <WindowsSdkPackageVersion>10.0.19041.34</WindowsSdkPackageVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>InfoPanel.Windows11NowPlayingPlugin</AssemblyName>
+    <RootNamespace>Windows11NowPlayingPlugin</RootNamespace>
+    <UseWindowsForms>false</UseWindowsForms>
+    <UseWPF>false</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Reference to InfoPanel.Plugins - Update path if InfoPanel is installed elsewhere -->
+    <Reference Include="InfoPanel.Plugins">
+      <HintPath>C:\Program Files (x86)\InfoPanel\InfoPanel.Plugins.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="PluginInfo.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <Target Name="CreateInfopanelPackage" AfterTargets="Build">
+    <PropertyGroup>
+      <_PackageDir>$(OutputPath)packaging\InfoPanel.Windows11NowPlayingPlugin\</_PackageDir>
+      <_InfopanelPath>$(MSBuildProjectDirectory)\InfoPanel.Windows11NowPlayingPlugin.infopanel</_InfopanelPath>
+    </PropertyGroup>
+    <MakeDir Directories="$(_PackageDir)" />
+    <Copy SourceFiles="$(OutputPath)InfoPanel.Windows11NowPlayingPlugin.dll" DestinationFolder="$(_PackageDir)" />
+    <Copy SourceFiles="$(OutputPath)PluginInfo.ini" DestinationFolder="$(_PackageDir)" />
+    <ZipDirectory SourceDirectory="$(OutputPath)packaging" DestinationFile="$(_InfopanelPath)" Overwrite="true" />
+    <RemoveDir Directories="$(OutputPath)packaging" />
+    <Message Importance="high" Text="Created package: $(_InfopanelPath)" />
+  </Target>
+
+</Project>

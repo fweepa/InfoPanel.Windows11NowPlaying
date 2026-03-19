@@ -9,7 +9,10 @@
     <WindowsSdkPackageVersion>10.0.19041.34</WindowsSdkPackageVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <AssemblyName>InfoPanel.Windows11NowPlayingPlugin</AssemblyName>
+    <!-- InfoPanel's loader convention expects <FolderName>.dll where FolderName is the extracted ZIP folder
+         (derived from PluginInfo.ini Website repoName). Our packaging folder is InfoPanel.Windows11NowPlaying,
+         so the output assembly must be named InfoPanel.Windows11NowPlaying.dll. -->
+    <AssemblyName>InfoPanel.Windows11NowPlaying</AssemblyName>
     <RootNamespace>Windows11NowPlayingPlugin</RootNamespace>
     <UseWindowsForms>false</UseWindowsForms>
     <UseWPF>false</UseWPF>
@@ -30,11 +33,12 @@
 
   <Target Name="CreateInfopanelPackage" AfterTargets="Build">
     <PropertyGroup>
-      <_PackageDir>$(OutputPath)packaging\InfoPanel.Windows11NowPlayingPlugin\</_PackageDir>
+      <!-- Ensure installed plugin folder matches marketplace repoName (see PluginInfo.ini Website) -->
+      <_PackageDir>$(OutputPath)packaging\InfoPanel.Windows11NowPlaying\</_PackageDir>
       <_InfopanelPath>$(MSBuildProjectDirectory)\InfoPanel.Windows11NowPlayingPlugin.infopanel</_InfopanelPath>
     </PropertyGroup>
     <MakeDir Directories="$(_PackageDir)" />
-    <Copy SourceFiles="$(OutputPath)InfoPanel.Windows11NowPlayingPlugin.dll" DestinationFolder="$(_PackageDir)" />
+    <Copy SourceFiles="$(OutputPath)InfoPanel.Windows11NowPlaying.dll" DestinationFolder="$(_PackageDir)" />
     <Copy SourceFiles="$(OutputPath)PluginInfo.ini" DestinationFolder="$(_PackageDir)" />
     <ZipDirectory SourceDirectory="$(OutputPath)packaging" DestinationFile="$(_InfopanelPath)" Overwrite="true" />
     <RemoveDir Directories="$(OutputPath)packaging" />

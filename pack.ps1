@@ -20,18 +20,21 @@ if (Test-Path $releaseDir) {
     $outDir = $releaseDir
 }
 
-# Create package structure (InfoPanel expects InfoPanel.PluginName/ folder inside zip)
-$packageDir = "packaging\InfoPanel.Windows11NowPlayingPlugin"
+# Create package structure (InfoPanel expects the marketplace-matching folder inside zip)
+# Marketplace repoName is derived from the repo portion after `.../` in `PluginInfo.ini` Website:
+#   https://github.com/fweepa/InfoPanel.Windows11NowPlaying -> repoName = InfoPanel.Windows11NowPlaying
+$packageDir = "packaging\InfoPanel.Windows11NowPlaying"
 New-Item -ItemType Directory -Force -Path $packageDir | Out-Null
 
-Copy-Item "$outDir\InfoPanel.Windows11NowPlayingPlugin.dll" -Destination $packageDir
+# Loader convention expects <FolderName>.dll (FolderName = InfoPanel.Windows11NowPlaying)
+Copy-Item "$outDir\InfoPanel.Windows11NowPlaying.dll" -Destination $packageDir
 Copy-Item "$outDir\PluginInfo.ini" -Destination $packageDir
 
 # Create .zip package (InfoPanel only processes InfoPanel.*.zip files)
 $zipPath = "InfoPanel.Windows11NowPlayingPlugin.zip"
 if (Test-Path $zipPath) { Remove-Item $zipPath }
 
-Compress-Archive -Path "packaging\InfoPanel.Windows11NowPlayingPlugin" -DestinationPath $zipPath -Force
+Compress-Archive -Path $packageDir -DestinationPath $zipPath -Force
 
 # Cleanup
 Remove-Item -Recurse -Force "packaging"

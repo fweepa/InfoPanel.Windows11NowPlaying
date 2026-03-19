@@ -28,7 +28,7 @@ This plugin displays currently playing media information from Windows 11's Globa
 ### Option B: Manual copy
 
 1. Build the plugin and run `.\pack.ps1`, or unzip the `InfoPanel.Windows11NowPlayingPlugin.zip` file
-2. Copy the **entire** `InfoPanel.Windows11NowPlayingPlugin` folder to one of:
+2. Copy the **entire** `InfoPanel.Windows11NowPlaying` folder to one of:
    - **User plugins:** `%APPDATA%\Roaming\InfoPanel\Plugins\`
    - **Development:** `[InfoPanel Install Directory]\Plugins\`
 3. The folder must stay intact — InfoPanel loads plugins from subfolders. Ensure these files are inside the folder:
